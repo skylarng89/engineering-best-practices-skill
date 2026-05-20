@@ -39,10 +39,10 @@ metadata:
   organization_url: https://upperloftcreations.com
 
   # Versioning — follows CalVer: YYYY.MINOR.PATCH
-  version: "2026.1.0"
+  version: "2026.1.1"
   release_date: "2026-05-20"
   changelog:
-    - version: "2026.1.0"
+    - version: "2026.1.1"
       date: "2026-05-20"
       notes: >
         Initial public release. Covers 16 stacks with 2026 baselines.

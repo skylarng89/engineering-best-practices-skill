@@ -1,0 +1,56 @@
+name: Auto Tag & Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  auto-tag:
+    name: Tag version from SKILL.md frontmatter
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # full history needed to check existing tags
+
+      - name: Extract version from SKILL.md
+        id: version
+        run: |
+          VERSION=$(grep -m1 '^\s*version:' SKILL.md | sed 's/.*version:\s*["\x27]\?\([^"\x27]*\)["\x27]\?.*/\1/' | tr -d '[:space:]')
+          if [ -z "$VERSION" ]; then
+            echo "Could not extract version from SKILL.md frontmatter"
+            exit 1
+          fi
+          echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Detected version: $VERSION"
+
+      - name: Check if tag already exists
+        id: tag_check
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          if git rev-parse "refs/tags/$VERSION" > /dev/null 2>&1; then
+            echo "Tag $VERSION already exists — skipping."
+            echo "EXISTS=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Tag $VERSION does not exist — will create."
+            echo "EXISTS=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate SKILL.md before tagging
+        if: steps.tag_check.outputs.EXISTS == 'false'
+        run: npx --yes skills validate SKILL.md
+
+      - name: Create and push tag
+        if: steps.tag_check.outputs.EXISTS == 'false'
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "$VERSION" -m "Release $VERSION"
+          git push origin "$VERSION"
+          echo "Tagged and pushed: $VERSION"
