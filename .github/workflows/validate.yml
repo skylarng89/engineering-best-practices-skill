@@ -1,0 +1,46 @@
+name: Validate Skill
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    name: Validate SKILL.md
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Validate frontmatter
+        run: npx --yes skills validate SKILL.md
+
+      - name: Check well-known discovery files exist
+        run: |
+          test -f .well-known/skills/index.json || (echo "Missing .well-known/skills/index.json" && exit 1)
+          test -f .well-known/agent-skills/engineering-best-practices-2026/skill.md || (echo "Missing well-known skill.md" && exit 1)
+          echo "All discovery files present."
+
+      - name: Verify well-known skill.md matches SKILL.md
+        run: |
+          diff SKILL.md .well-known/agent-skills/engineering-best-practices-2026/skill.md \
+            && echo "Files match." \
+            || (echo "SKILL.md and well-known skill.md are out of sync. Run: cp SKILL.md .well-known/agent-skills/engineering-best-practices-2026/skill.md" && exit 1)
+
+      - name: Validate index.json
+        run: |
+          node -e "
+            const fs = require('fs');
+            const index = JSON.parse(fs.readFileSync('.well-known/skills/index.json', 'utf8'));
+            if (!index.spec_version) throw new Error('Missing spec_version');
+            if (!index.skills?.length) throw new Error('No skills listed');
+            console.log('index.json is valid. Skills:', index.skills.map(s => s.name).join(', '));
+          "

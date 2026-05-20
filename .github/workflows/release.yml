@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "[0-9][0-9][0-9][0-9].[0-9]+.[0-9]+" # CalVer: YYYY.MINOR.PATCH
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Validate before release
+        run: npx --yes skills validate SKILL.md
+
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+
+      - name: Extract changelog entry for this version
+        id: changelog
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          # Extract the section for this version from CHANGELOG.md
+          NOTES=$(awk "/^## \[${VERSION}\]/{found=1; next} found && /^## /{exit} found{print}" CHANGELOG.md)
+          if [ -z "$NOTES" ]; then
+            NOTES="See CHANGELOG.md for details."
+          fi
+          # Write to file to preserve newlines
+          echo "$NOTES" > release_notes.txt
+
+      - name: Create zip archive
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          zip -r "engineering-best-practices-skill-${VERSION}.zip" \
+            SKILL.md README.md LICENSE CHANGELOG.md CONTRIBUTING.md \
+            .well-known/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          name: "v${{ steps.version.outputs.VERSION }}"
+          body_path: release_notes.txt
+          files: "engineering-best-practices-skill-${{ steps.version.outputs.VERSION }}.zip"
+          make_latest: true

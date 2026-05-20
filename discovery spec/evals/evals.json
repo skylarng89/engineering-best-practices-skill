@@ -1,0 +1,110 @@
+[
+  {
+    "id": "trigger-nodejs-security",
+    "description": "Skill triggers for a Node.js security review request",
+    "input": "Review this Express.js route handler for security issues",
+    "expected_skill": "engineering-best-practices-2026",
+    "expected_behaviours": [
+      "References input validation with Zod or Joi",
+      "Mentions Helmet middleware",
+      "Flags missing rate limiting",
+      "Checks for SQL/NoSQL injection risk",
+      "Recommends argon2 or bcrypt if password handling is present"
+    ]
+  },
+  {
+    "id": "trigger-nextjs-auth",
+    "description": "Skill triggers for Next.js authentication implementation",
+    "input": "Implement authentication in my Next.js 15 App Router application",
+    "expected_skill": "engineering-best-practices-2026",
+    "expected_behaviours": [
+      "Warns against relying solely on middleware for auth (CVE-2025-29927)",
+      "Recommends a Data Access Layer (DAL)",
+      "Recommends HttpOnly Secure SameSite cookies over localStorage",
+      "Mentions session maxAge limits",
+      "References Server Actions and Route Handler re-validation"
+    ]
+  },
+  {
+    "id": "trigger-java-concurrency",
+    "description": "Skill triggers for Java concurrency question",
+    "input": "How should I handle concurrent requests in my Spring Boot 4 service?",
+    "expected_skill": "engineering-best-practices-2026",
+    "expected_behaviours": [
+      "Recommends virtual threads (spring.threads.virtual.enabled=true)",
+      "Distinguishes I/O-bound vs CPU-bound workload guidance",
+      "Mentions Structured Concurrency for Spring Boot 4 / Java 25",
+      "Advises against pooling virtual threads"
+    ]
+  },
+  {
+    "id": "trigger-postgres-schema",
+    "description": "Skill triggers for PostgreSQL schema design",
+    "input": "Design a PostgreSQL schema for a multi-tenant SaaS application",
+    "expected_skill": "engineering-best-practices-2026",
+    "expected_behaviours": [
+      "Recommends schema-per-tenant or row-level security (RLS)",
+      "Uses TIMESTAMPTZ not TIMESTAMP",
+      "Recommends UUID for distributed primary keys",
+      "Mentions Flyway or Liquibase for migrations",
+      "Recommends pg_stat_statements for slow query analysis"
+    ]
+  },
+  {
+    "id": "trigger-rust-error-handling",
+    "description": "Skill triggers for Rust error handling",
+    "input": "Write a Rust function that reads a config file and calls an HTTP API",
+    "expected_skill": "engineering-best-practices-2026",
+    "expected_behaviours": [
+      "Uses Result<T, E> with ? operator",
+      "Uses thiserror for error types in library code or anyhow for application code",
+      "Uses tokio::task::spawn_blocking for file I/O in async context",
+      "No .unwrap() in production code"
+    ]
+  },
+  {
+    "id": "trigger-elixir-supervision",
+    "description": "Skill triggers for Elixir OTP design",
+    "input": "Design the supervision tree for an Elixir background job processor",
+    "expected_skill": "engineering-best-practices-2026",
+    "expected_behaviours": [
+      "References GenServer and Supervisor OTP behaviours",
+      "Recommends appropriate supervision strategy (one_for_one vs rest_for_one)",
+      "Mentions Broadway or GenStage for backpressure",
+      "Advises max_concurrency on Task.async_stream"
+    ]
+  },
+  {
+    "id": "trigger-react-accessibility",
+    "description": "Skill triggers for React component accessibility",
+    "input": "Build a modal dialog component in React 19",
+    "expected_skill": "engineering-best-practices-2026",
+    "expected_behaviours": [
+      "Uses semantic HTML elements",
+      "Manages focus trap on modal open",
+      "Restores focus on modal close",
+      "Applies aria-modal and role=dialog",
+      "Ensures keyboard navigability and Escape to close"
+    ]
+  },
+  {
+    "id": "trigger-idempotency",
+    "description": "Skill triggers for API idempotency requirements",
+    "input": "Build a payment processing endpoint in NestJS",
+    "expected_skill": "engineering-best-practices-2026",
+    "expected_behaviours": [
+      "Requires idempotency key on POST endpoint",
+      "Stores idempotency key in deduplication table with TTL",
+      "Wraps DB operations in a transaction",
+      "Mentions at-least-once delivery risk for background jobs",
+      "Applies rate limiting on the endpoint"
+    ]
+  },
+  {
+    "id": "no-trigger-general-question",
+    "description": "Skill should NOT trigger for a non-coding question",
+    "input": "What is the capital of France?",
+    "expected_skill": null,
+    "expected_behaviours": ["Answers directly without loading skill context"]
+  }
+]

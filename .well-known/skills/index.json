@@ -1,0 +1,46 @@
+{
+  "spec_version": "0.2.0",
+  "publisher": {
+    "name": "Patrick Aziken",
+    "handle": "skylarng89",
+    "url": "https://github.com/skylarng89",
+    "organization": "Upperloft Creations Limited",
+    "organization_url": "https://upperloftcreations.com",
+    "contact": "patrick@upperloftcreations.com"
+  },
+  "skills": [
+    {
+      "name": "engineering-best-practices-2026",
+      "version": "2026.1.0",
+      "description": "Comprehensive 2026 engineering best practices for agentic coding across Node.js, Next.js, NestJS, Java, Spring Boot, Python, Elixir, Phoenix, Erlang, Rust, Go, React, Vue, Nuxt, Astro, and SQL/NoSQL databases.",
+      "license": "MIT",
+      "skill_url": "/.well-known/agent-skills/engineering-best-practices-2026/skill.md",
+      "repository": "https://github.com/skylarng89/engineering-best-practices-skill",
+      "tags": [
+        "nodejs",
+        "nextjs",
+        "nestjs",
+        "java",
+        "spring-boot",
+        "python",
+        "elixir",
+        "phoenix",
+        "erlang",
+        "rust",
+        "golang",
+        "react",
+        "vue",
+        "nuxt",
+        "astro",
+        "sql",
+        "nosql",
+        "security",
+        "performance",
+        "best-practices",
+        "2026"
+      ],
+      "category": "development",
+      "maturity": "stable"
+    }
+  ]
+}
